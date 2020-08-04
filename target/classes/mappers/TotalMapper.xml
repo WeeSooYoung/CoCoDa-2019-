@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.cocoda.dao.TotalMapper">
+
+	<select id="SalesInfo" parameterType="string" resultType="map">
+		select
+		    A.total_pop as TOTAL_POP, B.total_sales as TOTAL_SALES, B.total_store as TOTAL_STORE
+		from(
+		    select
+		         sum(fpop) as total_pop
+		    from
+		         float_population_tb
+		    group by
+		        fixed_date, sigungu_cd
+		    having
+		            to_char(fixed_date,'mm') = 10
+		        and
+		            sigungu_cd = #{sigungu_cd}
+		    ) A, (
+		    select
+		        sum(total) total_sales, sum(cnt) total_store
+		    from (
+		        select
+		            (man+woman) as total, store_cnt as cnt
+		        from
+		            sales_tb
+		        where
+		                sigungu_cd = #{sigungu_cd}
+		            and
+		                to_char(fixed_date,'mm') = 10
+		         ) 
+		    )B
+	</select>
+
+
+
+	<!-- 성장성 -->
+	
+	<!-- 월별 성장률 / 월별 매출 규모 -->
+	<select id = "MonthSales" resultType="Long" parameterType="string">
+		select
+   			sum(man) + sum(woman)
+   			
+		from 
+   			sales_tb
+   			
+		group by 
+    		fixed_date, sigungu_cd
+    		
+		having
+    		sigungu_cd = #{sigungu_cd}
+    		
+    	order by
+    		fixed_date
+    		
+	</select>
+	
+	<!-- 전체 매출규모  -->
+	<select id = "TotalSales" resultType = "Long">
+		select
+    		sum(man) + sum(woman) 
+		from 
+			sales_tb
+		where
+			fixed_date =
+			(
+			select 
+				fixed_date
+			from
+				(select distinct
+    				fixed_date,rownum
+    			from
+    				sales_tb
+    			order by
+    				fixed_date desc)
+    		where
+    			rownum = 1
+    		)
+    </select>
+    
+    <!-- 안정성 -->
+    
+    <!-- 변동성 -->
+    <select id = "Variation" resultType = "int" parameterType="string">
+    	select 
+   			sum(store_cnt)
+		from
+    		sales_tb
+    	where
+    		sigungu_cd = #{sigungu_cd}
+		group by 
+   		 	fixed_date
+		order by
+     		fixed_date 
+    </select>
+    
+    <!-- 운영 연수 -->
+    <select id = "OperationYear" resultType = "int" parameterType = "map">
+    	select
+    		sum(avg_biz_month)
+    	from
+    		sales_tb
+    	where
+    		sigungu_cd = #{sigungu_cd}
+    		and
+    		sales_divison_s_cd = #{sales_divison_s_cd}
+    
+    </select>
+    
+    <!-- 매출변동률 -->
+    <select id = "SalesVariation" resultType = "Long" parameterType = "map">
+    	select
+   			sum(man)+sum(woman)
+		from 
+   			sales_tb
+		group by 
+    		fixed_date, sigungu_cd, sales_divison_s_cd
+		having
+    		sigungu_cd = #{sigungu_cd}
+    		and
+    		sales_divison_s_cd = #{sales_divison_s_cd}
+    	order by
+    		fixed_date
+    		
+    </select>
+    
+    <!-- 집객력 -->
+    
+    <!-- 유동 인구 -->
+    <select id = "FloatPopulation" resultType = "double" parameterType = "string">
+    	select
+		    avg(fpop)
+		from
+		    float_population_tb
+		where
+		    fixed_date = (
+		        select
+		            fixed_date
+		        from
+		            (
+		            select
+		                fixed_date, rownum
+		            from
+		                float_population_tb
+		            order by
+		                fixed_date desc
+		            )
+		        where
+		            rownum = 1
+		    )
+		    and
+		    sigungu_cd = #{sigungu_cd}
+			
+    </select>
+    
+    <!-- 주거 인구 -->
+    <select id = "StayPopulation" resultType = "double" parameterType = "string">
+	    select
+		    avg(spop)
+		from
+		     stay_population_tb
+		where
+		    fixed_date = (
+		        select
+		            fixed_date
+		        from
+		            (
+		            select
+		                fixed_date, rownum
+		            from
+		                stay_population_tb
+		            order by
+		                fixed_date desc
+		            )
+		        where
+		            rownum = 1
+		    )
+		    and
+		   	sigungu_cd = #{sigungu_cd}
+    </select>
+    
+    <!-- 직장 인구 -->
+    <select id = "WorkerPopulation" resultType = "double" parameterType = "string">
+		select
+		    avg(wpop)
+		from
+		     worker_population_tb
+		where
+		    fixed_date = (
+		        select
+		            fixed_date
+		        from
+		            (
+		            select
+		                fixed_date, rownum
+		            from
+		                worker_population_tb
+		            order by
+		                fixed_date desc
+		            )
+		        where
+		            rownum = 1
+		    )
+		    and
+		    sigungu_cd = #{sigungu_cd}   
+    </select>
+    
+    <!-- 구매력 -->
+    
+    <!-- 건당 결제금액 -->
+    <select id = "cntPrice" resultType = "int" parameterType = "string">
+    	select
+  			round( (avg(man) + avg(woman)) / (avg(man_cnt) + avg(woman_cnt)),0)
+		from
+    		 sales_tb
+		where
+		    fixed_date = (
+		        select
+		            fixed_date
+		        from
+		            (
+		            select
+		                fixed_date, rownum
+		            from
+		                sales_tb
+		            order by
+		                fixed_date desc
+		            )
+		        where
+		            rownum = 1
+		    )
+		    and
+		    sigungu_cd = #{sigungu_cd}
+    	
+    </select>
+    
+    <!-- 소비수준 -->
+    <select id = "incomeLevel" resultType = "int" parameterType = "string">
+   		select
+   			month_income
+   		from
+   			income_tb
+   		where
+   			fixed_date = (
+   				select
+   					fixed_date
+   				from
+   					(
+   					select
+   						fixed_date, rownum
+   					from
+   						sales_tb
+   					order by
+   						fixed_date desc
+   					)
+   				where
+   					rownum = 1
+   			)
+   			and
+   			sigungu_cd = #{sigungu_cd}
+    </select>
+    
+    
+</mapper>

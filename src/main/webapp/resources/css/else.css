@@ -1,0 +1,17 @@
+@charset "UTF-8";
+.up {
+   color: red;
+}
+
+.down {
+   color: blue;
+}
+
+.focus{
+	font-size: 1.2em;
+	font-weight: normal;
+}
+
+.focuspoint{
+	cursor: pointer;
+}

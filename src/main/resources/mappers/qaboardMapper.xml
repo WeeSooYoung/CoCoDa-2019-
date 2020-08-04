@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.project.cocoda.dao.qaboardMapper">
+
+<!-- 게시글 읽기 -->
+	<select id="readingBoard" resultType="board" parameterType="string">
+		select
+			boardnum
+			, id
+			, title
+			, to_char(inputdate, 'YYYY-MM-DD') inputdate
+			, hits
+		from
+			qaboard
+		<if test="_parameter != null">
+		where
+			title like '%' || #{searchText} || '%'
+		</if>
+		order by boardnum desc
+	</select>
+	
+	
+	
+	
+	<select id="readingEachBoard" resultType="board" parameterType="int" >
+		select
+			boardnum
+			, id
+			, title
+			, content
+			, to_char(inputdate, 'YYYY-MM-DD') inputdate
+			, hits
+		from 
+			qaboard
+		where
+			boardnum = #{boardnum}
+	
+	</select>
+
+	<insert id="insertboard" parameterType="board">
+		insert into qaboard (
+			boardnum
+			, id
+			, title
+			, content
+		)
+		values (
+			qaboard_seq.nextval
+			, #{id}
+			, #{title}
+			, #{content}
+		)
+	</insert>
+
+	<!-- 조회수 1 증가 -->
+	<update id="addHits" parameterType="int">
+		update
+			qaboard
+		set
+			hits = hits + 1
+		where
+			boardnum = #{boardnum}
+	</update>
+	
+	<delete id= "deleteBoard" parameterType="int">
+	
+		delete
+		
+			qaboard
+			
+		where
+		
+			boardnum=#{boardnum}
+			
+	</delete>
+	
+	<!-- 글 수정 -->
+	<update id="updateBoard" parameterType="board">
+		update
+			qaboard
+		set
+			title = #{title}
+			, content = #{content}
+		where
+			boardnum = #{boardnum}
+			and id = #{id}
+	</update>
+	
+	<!-- 전체 글 개수 (검색 필터링 후) -->			
+	<select id="getTotal" parameterType="string" resultType="int">			
+		select
+			count(*)
+		from		
+			qaboard	
+		<if test="_parameter != null">		
+		where		
+			title like '%' || #{searchText} || '%'	
+		</if>		
+	</select>	
+	
+	<insert id="insertReply" parameterType="reply">
+		insert into
+			qareply(
+				replynum
+				,boardnum
+				,id
+				,text
+			)
+			values(
+				qareply_seq.nextval
+				,#{boardnum}
+				,#{id}
+				,#{text}
+			)
+			
+	</insert>
+			
+	
+	
+	<select id="listReply" parameterType="int" resultType="reply">
+		
+		select
+			replynum
+			,boardnum
+			,id
+			,text
+			,to_char(inputdate,'yyyy-mm-dd')inputdate
+		from
+			qareply
+		where	
+			boardnum=#{boardnum}
+		order by replynum asc
+			
+	</select>
+	
+	<!-- 리플삭제 -->
+	<delete id="deleteReply" parameterType="reply">
+		delete from
+			qareply
+		where
+			replynum=#{replynum}
+			and
+			id=#{id}
+	</delete>
+	
+	<!-- 리플 수정 -->
+	<update id="updateReply" parameterType="reply">
+		update
+			qareply
+		set
+			text=#{text}
+		where
+			replynum=#{replynum}
+			and
+			id=#{id}
+	</update>
+</mapper>

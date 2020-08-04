@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.cocoda.dao.IndexMapper">
+	<select id ="division_middle" parameterType="string" resultType="map" >
+		select
+			 sales_divison_m_cd	
+			, sales_divison_m_nm
+			, sales_divison_s_cd	
+			, sales_divison_s_nm
+			
+		from
+			sales_division
+			
+		where
+			sales_divison_l_cd = #{sales_divison_l_cd}
+			
+		order by
+			sales_divison_m_cd
+			
+		</select>
+		
+		<select id ="divisionMap"  parameterType="string" resultType="hashmap">
+			select
+				sales_divison_l_nm
+				, sales_divison_m_nm	
+				, sales_divison_s_nm
+			from
+				sales_division
+			where
+				sales_divison_s_cd = #{_parameter}
+		</select>
+		<select id = "divisionNm" parameterType = "string" resultType = "string">
+			select
+				sales_divison_s_nm
+			from
+				sales_division
+			where
+				sales_divison_s_cd = #{_parameter}
+		
+		</select>
+</mapper>

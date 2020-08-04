@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.cocoda.dao.Danger_mapper">
+
+<select id="bringdanger" resultType="HashMap">
+
+	select
+	sigungu_cd
+	,danger_cd
+	,danger_point
+	from
+	danger_tb
+	where
+	fixed_date =
+	(select
+	fixed_date
+	from
+	(select
+	fixed_date,rownum
+	from
+	danger_tb
+	order by
+	fixed_date desc)
+	where
+	rownum=1)
+
+</select>
+
+
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.cocoda.dao.OfferMapper">
+	
+	<select id="selectmonth" resultType="String" parameterType="String">
+
+	select
+	fixed_date
+	from
+	<choose>
+		<when test='data == "sales"'>
+			(select
+			fixed_date, rownum
+			from
+			(select distinct
+            fixed_date
+            from
+            sales_tb)
+			order by
+			fixed_date desc)
+			where
+			<![CDATA[
+			rownum < 5
+			]]>
+		</when>
+	</choose>
+
+</select>
+	
+	
+	<select id="selectoffer" parameterType="ArrayList" resultType="HashMap">
+
+	select
+	sigungu_nm
+	,sales_divison_s_cd
+	,sales_divison_m_nm
+	,avg_biz_month
+	,lessoneyear
+	,twoyear
+	,threeyear
+	,fouryear
+	,overfiveyear
+	,sales_figures_mon
+	,sales_figures_tue
+	,sales_figures_wed
+	,sales_figures_thu
+	,sales_figures_fri
+	,sales_figures_sat
+	,sales_figures_sun
+	,time1
+	,time2
+	,time3
+	,time4
+	,time5
+	,time6
+	,man
+	,woman
+	,agesale10
+	,agesale20
+	,agesale30
+	,agesale40
+	,agesale50
+	,agesale60
+	,sales_cnt_mon
+	,sales_cnt_tue
+	,sales_cnt_wed
+	,sales_cnt_thu
+	,sales_cnt_fri
+	,sales_cnt_sat
+	,sales_cnt_sun
+	,sales_cnt_time1
+	,sales_cnt_time2
+	,sales_cnt_time3
+	,sales_cnt_time4
+	,sales_cnt_time5
+	,sales_cnt_time6
+	,man_cnt
+	,woman_cnt
+	,age_cnt_10
+	,age_cnt_20
+	,age_cnt_30
+	,age_cnt_40
+	,age_cnt_50
+	,age_cnt_60
+	,store_cnt
+	,to_char(fixed_date,'yyyy/mm/dd') tempmonth
+	from
+	sales_tb
+	where
+	sigungu_cd = #{sigungu_cd}
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS') = #{fixed_date}
+	and
+	sales_divison_s_cd = #{sales_divison_s_cd}
+	
+	</select>
+
+</mapper>

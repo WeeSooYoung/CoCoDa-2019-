@@ -1,0 +1,776 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.project.cocoda.dao.PopMapper">
+
+	<select id="selectmonth" resultType="String"
+		parameterType="String">
+
+		select
+		fixed_date
+		from
+		<choose>
+			<when test='data == "stay"'>
+				(select
+				fixed_date, rownum
+				from
+				(select distinct
+				fixed_date
+				from
+				stay_population_tb)
+				order by
+				fixed_date desc)
+				where
+			<![CDATA[
+			rownum < 5
+			]]>
+			</when>
+			<when test='data == "float"'>
+				(select
+				fixed_date, rownum
+				from
+				(select distinct
+				fixed_date
+				from
+				float_population_tb)
+				order by
+				fixed_date desc)
+				where
+			<![CDATA[
+			rownum < 5
+			]]>
+			</when>
+			<when test='data == "worker"'>
+				(select
+				fixed_date, rownum
+				from
+				(select distinct
+				fixed_date
+				from
+				worker_population_tb)
+				order by
+				fixed_date desc)
+				where
+			<![CDATA[
+			rownum < 5
+			]]>
+			</when>
+			<when test='data == "income"'>
+				(select
+				fixed_date, rownum
+				from
+				(select distinct
+				fixed_date
+				from
+				income_tb)
+				order by
+				fixed_date desc)
+				where
+			<![CDATA[
+			rownum < 5
+			]]>
+			</when>
+		</choose>
+
+	</select>
+
+	<select id="selectstay" resultType="Selectkey"
+		parameterType="HashMap">
+		select distinct
+		(select sum(spop)
+		from
+		stay_population_tb
+		where
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) allpop1
+		,(select sum(spop)
+		from
+		stay_population_tb
+		where
+		age = 10
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop10
+		,(select sum(spop)
+		from
+		stay_population_tb
+		where
+		age = 20
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop20
+		,(select sum(spop)
+		from
+		stay_population_tb
+		where
+		age = 30
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop30
+		,(select sum(spop)
+		from
+		stay_population_tb
+		where
+		age = 40
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop40
+		,(select sum(spop)
+		from
+		stay_population_tb
+		where
+		age = 50
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop50
+		,(select sum(spop)
+		from
+		stay_population_tb
+		where
+		age = 60
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop60
+		,(select sum(spop)
+		from
+		stay_population_tb
+		where
+		gender = 0
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) manpop
+		,(select sum(spop)
+		from
+		stay_population_tb
+		where
+		gender = 1
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) womanpop
+		from
+		stay_population_tb
+		where
+		sigungu_cd = #{sigungu_cd}
+	</select>
+
+	<select id="selectworker" resultType="Selectkey"
+		parameterType="HashMap">
+		select distinct
+		(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) allpop1
+		,(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		age = 10
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop10
+		,(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		age = 20
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop20
+		,(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		age = 30
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop30
+		,(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		age = 40
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop40
+		,(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		age = 50
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop50
+		,(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		age = 60
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop60
+		,(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		gender = 0
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) manpop
+		,(select sum(wpop)
+		from
+		worker_population_tb
+		where
+		gender = 1
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) womanpop
+		from
+		worker_population_tb
+		where
+		sigungu_cd = #{sigungu_cd}
+	</select>
+
+	<select id="selectfloat" resultType="Selectkey"
+		parameterType="HashMap">
+
+		select DISTINCT
+		(select sum(fpop)
+		from
+		float_population_tb
+		where
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) allpop1
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		gender=0
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) manpop
+		,(select
+		sum(fpop)
+		from
+		float_population_tb
+		where
+		gender=1
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) womanpop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		age = 10
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop10
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		age = 20
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop20
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		age = 30
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop30
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		age = 40
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop40
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		age = 50
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop50
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		age = 60
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) agepop60
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		timeline = 1
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) timepop1
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		timeline = 2
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) timepop2
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		timeline = 3
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) timepop3
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		timeline = 4
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) timepop4
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		timeline = 5
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) timepop5
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		timeline = 6
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) timepop6
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week in (1,2,3,4,5)
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) onweekpop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week in (0,6)
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) weekendpop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week = 1
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) monpop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week = 2
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) tuepop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week = 3
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) wedpop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week = 4
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) thrpop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week = 5
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) fripop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week = 6
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) satpop
+		,(select sum(fpop)
+		from
+		float_population_tb
+		where
+		week = 0
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+		and
+		sigungu_cd = #{sigungu_cd}) sunpop
+		from
+		float_population_tb
+
+	</select>
+
+	<select id="selectincome" resultType="Selectincome"
+		parameterType="HashMap">
+
+		select
+		month_income
+		,incomerate
+		,food
+		,cloth
+		,living
+		,medi
+		,transport
+		,hobby
+		,culture
+		,edu
+		,play
+		from
+		income_tb
+		where
+		sigungu_cd = #{sigungu_cd}
+		and
+		to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+
+	</select>
+	
+	
+<select id="selectfloat2" parameterType="HashMap" resultType="Selectkey">
+	
+	
+	select DISTINCT
+	(select sum(fpop)
+	from
+	float_population_tb
+	where
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) allpop1
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	gender=0
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) manpop
+	,(select
+	sum(fpop)
+	from
+	float_population_tb2
+	where
+	gender=1
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) womanpop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	age = 10
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) agepop10
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	age = 20
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) agepop20
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	age = 30
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) agepop30
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	age = 40
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) agepop40
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	age = 50
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) agepop50
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	age = 60
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) agepop60
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	timeline = 1
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) timepop1
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	timeline = 2
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) timepop2
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	timeline = 3
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) timepop3
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	timeline = 4
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) timepop4
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	timeline = 5
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) timepop5
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	timeline = 6
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) timepop6
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week in (1,2,3,4,5)
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) onweekpop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week in (0,6)
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) weekendpop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week = 1
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) monpop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week = 2
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) tuepop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week = 3
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) wedpop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week = 4
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) thrpop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week = 5
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) fripop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week = 6
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) satpop
+	,(select sum(fpop)
+	from
+	float_population_tb2
+	where
+	week = 0
+	and
+	to_char(fixed_date,'rrrr-mm-dd HH24:MI:SS')=#{fixed_date}
+	and
+	wgsx between (#{wgsx} - 0.0025) and (#{wgsx}   + 0.0025)
+	and
+	wgsy between (#{wgsy} - 0.0025) and (#{wgsy} + 0.0025)) sunpop
+	from
+	float_population_tb2
+	
+
+</select>
+	
+</mapper>
