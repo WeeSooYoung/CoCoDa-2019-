@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Built-By: wsv61
-Build-Jdk: 14
+Built-By: IF-N-1709-054
+Build-Jdk: 1.8.0_121
 Created-By: Maven Integration for Eclipse
 
