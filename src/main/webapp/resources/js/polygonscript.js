@@ -33,7 +33,7 @@
 				var latlngarray = item.geometry.coordinates[0];
 				var polygonPath = new Array;
 				$(latlngarray).each(function (index2,item2){
-					polygonPath.push(new daum.maps.LatLng(item2[1],item2[0]));	
+					polygonPath.push(new kakao.maps.LatLng(item2[1],item2[0]));	
 				});
 				
 				$(sigungucdarray).each(function(index3,cd) {
@@ -43,7 +43,7 @@
 								
 								var colortemp = colorcheck (dg.DANGER_CD); 
 								
-								var polygon = new daum.maps.Polygon({
+								var polygon = new kakao.maps.Polygon({
 								    path:polygonPath, // 그려질 다각형의 좌표 배열입니다
 								    strokeWeight: 1, // 선의 두께입니다
 								    strokeColor: '#FFFFFF', // 선의 색깔입니다
@@ -57,9 +57,9 @@
 								var iwContent = '<div>' + cd.SIG_KOR_NM + '</div>' // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
 								iwContent += '<div>' + dg.DANGER_CD + '<div/>'
 								iwContent += '<div>' + dg.DANGER_POINT + '<div/>'
-								iwPosition = new daum.maps.LatLng(cd.LAT, cd.LNG) //인포윈도우 표시 위치입니다
+								iwPosition = new kakao.maps.LatLng(cd.LAT, cd.LNG) //인포윈도우 표시 위치입니다
 								 
-								var infowindow = new daum.maps.InfoWindow({
+								var infowindow = new kakao.maps.InfoWindow({
 								    map: map, // 인포윈도우가 표시될 지도
 								    position : iwPosition, 
 								    content : iwContent,
@@ -81,24 +81,24 @@
 								};
 								
 								// 다각형에 마우스오버 이벤트를 등록합니다
-								daum.maps.event.addListener(polygon, 'mouseover', function() { 
+								kakao.maps.event.addListener(polygon, 'mouseover', function() { 
 								 // 다각형의 채우기 옵션을 변경합니다
 									polygon.setOptions(mouseoverOption);
 									
 									
 								});
 								
-								daum.maps.event.addListener(polygon, 'click' , function() {
+								kakao.maps.event.addListener(polygon, 'click' , function() {
 									polygon.setOptions(mouseoverOption);
-									daum.maps.event.addListener(searchmarker, 'mouseover', function() {
+									kakao.maps.event.addListener(searchmarker, 'mouseover', function() {
 										polygon.setOptions(mouseoverOption);
 									});
-									daum.maps.event.addListener(searchmarker, 'mouseout', function() {
+									kakao.maps.event.addListener(searchmarker, 'mouseout', function() {
 										polygon.setOptions(mouseoutOption);
 									});
 								});
 								
-								daum.maps.event.addListener(polygon, 'mouseout', function() { 
+								kakao.maps.event.addListener(polygon, 'mouseout', function() { 
 
 								    // 다각형의 채우기 옵션을 변경합니다
 								    polygon.setOptions(mouseoutOption);

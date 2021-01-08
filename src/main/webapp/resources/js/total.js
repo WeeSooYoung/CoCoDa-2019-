@@ -49,21 +49,21 @@ function total(param){
     
     var marker = 
     {
-        position: new daum.maps.LatLng(cy, cx), 
+        position: new kakao.maps.LatLng(cy, cx), 
         text: '지정 영역' // text 옵션을 설정하면 마커 위에 텍스트를 함께 표시할 수 있습니다     
     }
 ;
     
     var staticMapContainer  = document.getElementById('staticMap'), // 이미지 지도를 표시할 div     
     staticMapOption = { 
-            center: new daum.maps.LatLng(cy, cx), // 이미지 지도의 중심좌표
+            center: new kakao.maps.LatLng(cy, cx), // 이미지 지도의 중심좌표
             level: 3, // 이미지 지도의 확대 레벨
             marker : marker
         };
         
     
 	// 이미지 지도를 표시할 div와 옵션으로 이미지 지도를 생성합니다
-	var staticMap = new daum.maps.StaticMap(staticMapContainer, staticMapOption);
+	var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
     
     total_table = '';
     

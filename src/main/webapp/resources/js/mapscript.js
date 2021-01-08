@@ -1,17 +1,17 @@
 
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	    mapOption = {   
-	        center: new daum.maps.LatLng(37.56409564726936,126.99094585236259), // 지도의 중심좌표
+	        center: new kakao.maps.LatLng(37.56409564726936,126.99094585236259), // 지도의 중심좌표
 	        level: 9 // 지도의 확대 레벨
 	    };
 	
-	var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+	var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 	
 	// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
-	var mapTypeControl = new daum.maps.MapTypeControl();
+	var mapTypeControl = new kakao.maps.MapTypeControl();
 	
 	// 지도 타입 컨트롤을 지도에 표시합니다
-	map.addControl(mapTypeControl, daum.maps.ControlPosition.TOPRIGHT);
+	map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
 
 	// 지도 확대, 축소 컨트롤에서 확대 버튼을 누르면 호출되어 지도를 확대하는 함수입니다
 	function zoomIn() {
@@ -26,16 +26,16 @@
 	var cx = 0;
 	var cy = 0;
 	var searchflag = true;
-	var icon = new daum.maps.MarkerImage(
-	        'http://i1.daumcdn.net/dmaps/apis/n_local_blit_04.png',
-	        new daum.maps.Size(31, 35));
-	var searchmarker = new daum.maps.Marker({
+	var icon = new kakao.maps.MarkerImage(
+	        'http://i1.kakaocdn.net/dmaps/apis/n_local_blit_04.png',
+	        new kakao.maps.Size(31, 35));
+	var searchmarker = new kakao.maps.Marker({
 		image : icon
 	});
-	searchmarker.setPosition(new daum.maps.LatLng(37.56683546512344,126.97865225560894));
+	searchmarker.setPosition(new kakao.maps.LatLng(37.56683546512344,126.97865225560894));
 	var searchinfowindow = '';
 	var infowindow = '';
-	var geocoder = new daum.maps.services.Geocoder();
+	var geocoder = new kakao.maps.services.Geocoder();
 
 	$(function() {
  	//Map Close
@@ -48,7 +48,7 @@
 	});
 	
 
-    daum.maps.event
+    kakao.maps.event
         .addListener(
             map,
             'click',
@@ -56,7 +56,7 @@
                 searchDetailAddrFromCoords(
                     mouseEvent.latLng,
                     function(result, status) {
-                        if (status === daum.maps.services.Status.OK) {
+                        if (status === kakao.maps.services.Status.OK) {
                             address = !!result[0].road_address ? result[0].road_address.address_name :
                                 '';
                             address += result[0].address.address_name;
@@ -97,9 +97,9 @@
 		
 		geocoder.addressSearch(search, function(result, status) {
 		 
-		     if (status === daum.maps.services.Status.OK) {
+		     if (status === kakao.maps.services.Status.OK) {
 
-		        var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 		        
 		        if (!searchflag) {
 		        	
@@ -117,11 +117,11 @@
 		        searchmarker.setMap(map);
 		        }
 		        
-		        searchinfowindow = new daum.maps.InfoWindow({
+		        searchinfowindow = new kakao.maps.InfoWindow({
 		            content: '<div style="width:100px;text-align:center;padding:6px 0;">' + search + '</div>',
 		            removable : true
 		        });
-		        if (status === daum.maps.services.Status.OK) {
+		        if (status === kakao.maps.services.Status.OK) {
                     address = !!result[0].road_address ? result[0].road_address.address_name :
                         '';
                     address += result[0].address.address_name;
@@ -148,12 +148,12 @@
 	}
 	
 	//클릭시 주소 표시
-	//var infowindow = new daum.maps.InfoWindow({zindex:1}); // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
+	//var infowindow = new kakao.maps.InfoWindow({zindex:1}); // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
 
     // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
-    daum.maps.event.addListener(map, 'click', function(mouseEvent) {
+    kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     	searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
-    		if (status === daum.maps.services.Status.OK) {
+    		if (status === kakao.maps.services.Status.OK) {
     			if (searchinfowindow!='') {
     				searchinfowindow.close();
     			}
@@ -189,7 +189,7 @@
 	
 	// 지도에 마커를 표시합니다
 	
-	daum.maps.event.addListener(map, 'click', function(mouseEvent) {
+	kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
 		var mousetemp = searchmarker.m.mouseover;
 		
 		if (mousetemp.length > 1) {
